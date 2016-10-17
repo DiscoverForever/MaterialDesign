@@ -1,0 +1,2 @@
+include ':app', ':TestBroadcastReceiver', ':NoLogoApp', ':CatchMadCat', ':InvokeApp', ':InOrUnstallApp', ':TestLoading', ':NiceWeather'
+include ':pullToRefresh'

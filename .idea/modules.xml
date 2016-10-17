@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/CatchMadCat/CatchMadCat.iml" filepath="$PROJECT_DIR$/CatchMadCat/CatchMadCat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/InOrUnstallApp/InOrUnstallApp.iml" filepath="$PROJECT_DIR$/InOrUnstallApp/InOrUnstallApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/InvokeApp/InvokeApp.iml" filepath="$PROJECT_DIR$/InvokeApp/InvokeApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MaterialDesign.iml" filepath="$PROJECT_DIR$/MaterialDesign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NiceWeather/NiceWeather.iml" filepath="$PROJECT_DIR$/NiceWeather/NiceWeather.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NoLogoApp/NoLogoApp.iml" filepath="$PROJECT_DIR$/NoLogoApp/NoLogoApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TestBroadcastReceiver/TestBroadcastReceiver.iml" filepath="$PROJECT_DIR$/TestBroadcastReceiver/TestBroadcastReceiver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TestLoading/TestLoading.iml" filepath="$PROJECT_DIR$/TestLoading/TestLoading.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pullToRefresh/pullToRefresh.iml" filepath="$PROJECT_DIR$/pullToRefresh/pullToRefresh.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="material.com.cn.myapplication">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".OtherActivity" />
+
+        <receiver android:name=".MyReceiver">
+
+            　　
+
+            <intent-filter>
+
+                　　　　
+                <!-- action的命名规则一般建议为：包名.intent.类名 -->
+
+
+                　　　　
+
+                <action android:name="MyReceiver" />
+
+                　　
+
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".WiFiReceiver">
+
+            　　
+
+            <intent-filter>
+
+                　　　　
+
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+
+                　　
+
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".InOrUnStallReceiver">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true"></service>
+    </application>
+
+</manifest>
