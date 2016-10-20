@@ -30,4 +30,5 @@ dependencies {
     compile files('libs/volley.jar')
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.jiechic.library:xUtils:2.6.14'
+    compile 'com.jungly:gridPasswordView:0.3'
 }
