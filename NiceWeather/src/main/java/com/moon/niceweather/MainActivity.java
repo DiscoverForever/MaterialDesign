@@ -69,6 +69,18 @@ public class MainActivity extends AppCompatActivity
     private TextView tv_temperature;
     @ViewInject(R.id.tv_weather)
     private TextView tv_weather;
+    @ViewInject(R.id.tv_weather_description)
+    private TextView tv_weather_description;
+    @ViewInject(R.id.tv_sunrise)
+    private TextView tv_sunrise;
+    @ViewInject(R.id.tv_sunset)
+    private TextView tv_sunset;
+    @ViewInject(R.id.tv_today_temperature)
+    private TextView tv_today_temperature;
+    @ViewInject(R.id.tv_humidity)
+    private TextView tv_humidity;
+    @ViewInject(R.id.tv_wind_speed)
+    private TextView tv_wind_speed;
 
 
     /* GPS Constant Permission */
@@ -133,13 +145,16 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * 初始化当天温度详细
+     *
      * @param response
      */
     private void initHorizontalScrollView(ResponseTemplate response) {
         mLayoutInflater = LayoutInflater.from(context);
 
         ArrayList<Temperature> temperatureList = response.getResult().getData().getF3h().getTemperature();
+
         for (int i = 0; i < temperatureList.size(); i++) {
+
             galleryItem = mLayoutInflater.inflate(R.layout.gallery_item, null);
             TextView hour = (TextView) galleryItem.findViewById(R.id.tv_hour);
             ImageView weatherImg = (ImageView) galleryItem.findViewById(R.id.iv_weather);
@@ -153,6 +168,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * 获取时间上下午
+     *
      * @param time
      * @return
      */
@@ -342,6 +358,29 @@ public class MainActivity extends AppCompatActivity
         tv_temperature.setText(temperature_now + "°");
         initNearlyWeekWeather(response);
         initHorizontalScrollView(response);
+        initWeatherDescription(response);
+        initTodayWeather(response);
+    }
+
+    /**
+     * 初始化当天天气具体信息
+     *
+     * @param response
+     */
+    private void initTodayWeather(ResponseTemplate response) {
+        tv_sunrise.setText("上午" + response.getResult().getData().getWeather().get(0).getInfo().getDay().get(5));
+        tv_sunset.setText("下午" + response.getResult().getData().getWeather().get(0).getInfo().getNight().get(5));
+        tv_today_temperature.setText(response.getResult().getData().getWeather().get(0).getInfo().getDay().get(0)+"°");
+        tv_humidity.setText(response.getResult().getData().getRealtime().getWeather().getHumidity());
+    }
+
+    /**
+     * 初始化当天天气描述和推荐
+     *
+     * @param response
+     */
+    private void initWeatherDescription(ResponseTemplate response) {
+        tv_weather_description.setText("空气质量" + response.getResult().getData().getPm25().getPm25().getQuality() + "," + response.getResult().getData().getPm25().getPm25().getDes());
     }
 
 

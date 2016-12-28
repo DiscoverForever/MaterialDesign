@@ -24,4 +24,6 @@
         completions."
     </string>
     <string name="bt_login">登录</string>
+    <string name="tv_city_name">开封</string>
+    <string name="tv_weather">大部多云</string>
 </resources>

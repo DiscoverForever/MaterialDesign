@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
 import com.moon.niceweather.R;
 import com.moon.niceweather.template.ResponseTemplate;
 import com.moon.niceweather.template.WeatherItem;
@@ -48,11 +50,8 @@ public class WeatherListAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.item_list_weather, null);
+            ViewUtils.inject(viewHolder,convertView);
 
-            viewHolder.tv_week = (TextView) convertView.findViewById(R.id.tv_week);
-            viewHolder.tv_temperature_min = (TextView) convertView.findViewById(R.id.tv_temperature_min);
-            viewHolder.tv_temperature_max = (TextView) convertView.findViewById(R.id.tv_temperature_max);
-            viewHolder.iv_weather = (ImageView) convertView.findViewById(R.id.iv_weather);
         } else {
 
             viewHolder = (ViewHolder) convertView.getTag();
@@ -66,9 +65,13 @@ public class WeatherListAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
+        @ViewInject(R.id.tv_week)
         private TextView tv_week;
+        @ViewInject(R.id.tv_temperature_min)
         private TextView tv_temperature_min;
+        @ViewInject(R.id.tv_temperature_max)
         private TextView tv_temperature_max;
+        @ViewInject(R.id.iv_weather)
         private ImageView iv_weather;
     }
 }

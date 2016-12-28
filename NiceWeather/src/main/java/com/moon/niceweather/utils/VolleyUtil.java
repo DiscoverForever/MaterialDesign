@@ -18,7 +18,6 @@ import java.util.Map;
  * Created by adminr on 2016/10/17.
  */
 public class VolleyUtil {
-    private String BaseUrl = "http://wthrcdn.etouch.cn/weather_mini?city=北京";
     private RequestQueue mQueue;
     private Context mContext;
     private Response.Listener<JSONObject> SuccessListener;
@@ -31,22 +30,43 @@ public class VolleyUtil {
         ErrorListener = errorListener;
     }
 
-    public void doGet() {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, BaseUrl, null, SuccessListener, ErrorListener);
+    public void doGet(String url) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, SuccessListener, ErrorListener);
         mQueue.add(jsonObjectRequest);
     }
 
-    public void doPost() {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,BaseUrl,null,SuccessListener, ErrorListener){
+    public void doPost(String url, final HashMap<String, String> data) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, SuccessListener, ErrorListener) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("name1", "value1");
-                map.put("name2", "value2");
 
-                return map;
+                return data;
             }
         };
 
     }
+
+    /**
+     * 根据经纬度获取地址
+     *
+     * @param latitude
+     * @param longitude
+     * @return
+     */
+    public String getLocationUrl(String latitude, String longitude) {
+        String url = "http://api.map.baidu.com/geocoder/v2/?ak=pPGNKs75nVZPloDFuppTLFO3WXebPgXg&location=" + latitude + "," + longitude + "&output=json&pois=0&coordtype=wgs84ll";
+        return url;
+    }
+
+    /**
+     * 根据城市名获取天气
+     *
+     * @param cityname
+     * @return
+     */
+    public String getWeatherUrl(String cityname) {
+        String url = "http://op.juhe.cn/onebox/weather/query?cityname=" + cityname + "&dtype=json&key=9dc35ae43b953f41d7d299933a9a2abb";
+        return url;
+    }
+
 }
