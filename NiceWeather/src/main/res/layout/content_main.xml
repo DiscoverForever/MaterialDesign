@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/black_overlay"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.moon.niceweather.MainActivity"
     tools:showIn="@layout/app_bar_main">
@@ -16,9 +14,10 @@
         android:id="@+id/bt_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/bt_login" />
+        android:text="@string/bt_login"
+        android:visibility="gone" />
 
-    <com.jungly.gridpasswordview.GridPasswordView
+    <!--<com.jungly.gridpasswordview.GridPasswordView
         android:id="@+id/pswView"
         android:layout_below="@+id/bt_login"
         android:layout_width="match_parent"
@@ -31,6 +30,106 @@
         app:gpvPasswordTransformation="*"
         app:gpvPasswordType="numberPassword"
         app:gpvTextColor="#2196F3"
-        app:gpvTextSize="25sp" />
+        app:gpvTextSize="25sp" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:paddingTop="35dp">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_city_name"
+            style="@style/TextCityStyle" />
+
+        <TextView
+            android:id="@+id/tv_weather"
+            style="@style/TextWeatherStyle" />
+
+        <TextView
+            android:id="@+id/tv_temperature"
+            style="@style/tv_temperature" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <TextView
+            android:id="@+id/tv_week"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="20dp"
+            android:text="星期三"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_day"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/tv_week"
+            android:text="今天"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/tv_min_temperature"
+            android:text="11"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_min_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
+            android:text="2"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#FFFFFF">
+
+    </RelativeLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/hs_day_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#FFFFFF">
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/lv_weather"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+    </LinearLayout>
+</LinearLayout>
