@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity
                                 Toast.makeText(MainActivity.this, volleyError.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
-                        volleyUtil.doGet(volleyUtil.getLocationUrl("" + location.getLatitude(), "" + location.getLongitude()));
+                        volleyUtil.doGet(volleyUtil.getLocationUrl("" + location.getLatitude(), "" + location.getLongitude(), "wgs84ll"));
                     } else {
                         Toast.makeText(MainActivity.this, "请打开网络开关", Toast.LENGTH_SHORT).show();
                     }
@@ -250,6 +250,24 @@ public class MainActivity extends AppCompatActivity
                     location = locationManager.getLastKnownLocation(locationProvider);
                     Toast.makeText(context, "" + location, Toast.LENGTH_SHORT).show();
                     if (location != null) {
+                        VolleyUtil volleyUtil = new VolleyUtil(this, new Response.Listener<JSONObject>() {
+
+                            @Override
+                            public void onResponse(JSONObject jsonObject) {
+                                Gson gson = new Gson();
+                                MyLocation myLocation = gson.fromJson(jsonObject.toString(), MyLocation.class);
+                                cityName = myLocation.getResult().getAddressComponent().getCity();
+                                Message msg = new Message();
+                                msg.what = 1;
+                                mhandler.sendMessage(msg);
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                Toast.makeText(MainActivity.this, volleyError.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        volleyUtil.doGet(volleyUtil.getLocationUrl("" + location.getLatitude(), "" + location.getLongitude(), "gps"));
                         String locationStr = "维度：" + location.getLatitude() + "\n"
                                 + "经度：" + location.getLongitude();
                         Toast.makeText(MainActivity.this, locationStr, Toast.LENGTH_SHORT).show();
@@ -370,7 +388,7 @@ public class MainActivity extends AppCompatActivity
     private void initTodayWeather(ResponseTemplate response) {
         tv_sunrise.setText("上午" + response.getResult().getData().getWeather().get(0).getInfo().getDay().get(5));
         tv_sunset.setText("下午" + response.getResult().getData().getWeather().get(0).getInfo().getNight().get(5));
-        tv_today_temperature.setText(response.getResult().getData().getWeather().get(0).getInfo().getDay().get(0)+"°");
+        tv_today_temperature.setText(response.getResult().getData().getWeather().get(0).getInfo().getDay().get(0) + "°");
         tv_humidity.setText(response.getResult().getData().getRealtime().getWeather().getHumidity());
     }
 
