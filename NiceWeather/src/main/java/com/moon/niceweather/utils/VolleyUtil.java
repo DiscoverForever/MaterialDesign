@@ -51,10 +51,11 @@ public class VolleyUtil {
      *
      * @param latitude
      * @param longitude
+     * @param coordtype 经纬度类型 gps||wgs84ll
      * @return
      */
-    public String getLocationUrl(String latitude, String longitude) {
-        String url = "http://api.map.baidu.com/geocoder/v2/?ak=pPGNKs75nVZPloDFuppTLFO3WXebPgXg&location=" + latitude + "," + longitude + "&output=json&pois=0&coordtype=wgs84ll";
+    public String getLocationUrl(String latitude, String longitude, String coordtype) {
+        String url = "http://api.map.baidu.com/geocoder/v2/?ak=pPGNKs75nVZPloDFuppTLFO3WXebPgXg&location=" + latitude + "," + longitude + "&output=json&pois=0&coordtype='+coordtype+'";
         return url;
     }
 
