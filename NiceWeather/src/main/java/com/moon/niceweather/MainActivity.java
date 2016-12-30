@@ -8,6 +8,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,10 +23,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -44,6 +47,7 @@ import com.moon.niceweather.adapter.WeatherListAdapter;
 import com.moon.niceweather.template.MyLocation;
 import com.moon.niceweather.template.ResponseTemplate;
 import com.moon.niceweather.template.Temperature;
+import com.moon.niceweather.utils.IdToResource;
 import com.moon.niceweather.utils.VolleyUtil;
 import com.yalantis.phoenix.PullToRefreshView;
 
@@ -65,6 +69,8 @@ public class MainActivity extends AppCompatActivity
     private ListView lv_weather;
     @ViewInject(R.id.tv_city_name)
     private TextView tv_city_name;
+    @ViewInject(R.id.tv_week)
+    private TextView tv_week;
     @ViewInject(R.id.tv_temperature)
     private TextView tv_temperature;
     @ViewInject(R.id.tv_weather)
@@ -81,6 +87,10 @@ public class MainActivity extends AppCompatActivity
     private TextView tv_humidity;
     @ViewInject(R.id.tv_wind_speed)
     private TextView tv_wind_speed;
+    @ViewInject(R.id.tv_temperature_min)
+    private TextView tv_temperature_min;
+    @ViewInject(R.id.tv_temperature_max)
+    private TextView tv_temperature_max;
 
 
     /* GPS Constant Permission */
@@ -98,14 +108,21 @@ public class MainActivity extends AppCompatActivity
     /* 当前城市名 */
     private String cityName = "";
     /* 当前温度 */
-    private String temperature_now = "";
+    private String temperatureNow = "";
+    /* 白天最高温度 */
+    private String temperatureMin = "";
+    /* 晚上最高温度 */
+    private String temperatureMax = "";
     /* 当前天气状况 */
     private String weather = "";
+    /* 星期 */
+    private String week = "";
+    /* 风速 */
+    private String windSpeed = "";
     private LayoutInflater mLayoutInflater;
     private View galleryItem = null;
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -161,6 +178,7 @@ public class MainActivity extends AppCompatActivity
             TextView temperature = (TextView) galleryItem.findViewById(R.id.tv_temperature);
             hour.setText(getTime(temperatureList.get(i).getJg()));
             temperature.setText(temperatureList.get(i).getJb());
+            weatherImg.setBackgroundResource(IdToResource.getPicResource(context,response.getResult().getData().getRealtime().getWeather().getImg()));
             hs_day_details.addView(galleryItem);
         }
 
@@ -182,6 +200,43 @@ public class MainActivity extends AppCompatActivity
         }
 
         return time;
+    }
+
+    /**
+     * 阿拉伯数字转中文星期几
+     *
+     * @param weekNum
+     * @return
+     */
+    public String getWeek(String weekNum) {
+        switch (weekNum) {
+            case "1":
+                weekNum = "星期一";
+                break;
+            case "2":
+                weekNum = "星期二";
+                break;
+            case "3":
+                weekNum = "星期三";
+                break;
+            case "4":
+                weekNum = "星期四";
+                break;
+            case "5":
+                weekNum = "星期五";
+                break;
+            case "6":
+                weekNum = "星期六";
+                break;
+            case "7":
+                weekNum = "星期日";
+                break;
+
+            default:
+                weekNum = "未知";
+                break;
+        }
+        return weekNum;
     }
 
     /**
@@ -214,9 +269,26 @@ public class MainActivity extends AppCompatActivity
                 case "passive":
                     location = locationManager.getLastKnownLocation(locationProvider);
                     if (location != null) {
+                        VolleyUtil volleyUtil = new VolleyUtil(this, new Response.Listener<JSONObject>() {
 
+                            @Override
+                            public void onResponse(JSONObject jsonObject) {
+                                Gson gson = new Gson();
+                                MyLocation myLocation = gson.fromJson(jsonObject.toString(), MyLocation.class);
+                                cityName = myLocation.getResult().getAddressComponent().getCity();
+                                Message msg = new Message();
+                                msg.what = 1;
+                                mhandler.sendMessage(msg);
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                Toast.makeText(MainActivity.this, volleyError.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        volleyUtil.doGet(volleyUtil.getLocationUrl("" + location.getLatitude(), "" + location.getLongitude(), "wgs84ll"));
                     } else {
-                        Toast.makeText(MainActivity.this, "请打开网络开关", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "请打开网络或GPS开关", Toast.LENGTH_SHORT).show();
                     }
                     break;
 
@@ -270,7 +342,6 @@ public class MainActivity extends AppCompatActivity
                         volleyUtil.doGet(volleyUtil.getLocationUrl("" + location.getLatitude(), "" + location.getLongitude(), "gps"));
                         String locationStr = "维度：" + location.getLatitude() + "\n"
                                 + "经度：" + location.getLongitude();
-                        Toast.makeText(MainActivity.this, locationStr, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(MainActivity.this, "请打开GPS开关", Toast.LENGTH_SHORT).show();
                     }
@@ -369,11 +440,19 @@ public class MainActivity extends AppCompatActivity
      */
     private void updateDataToUI(ResponseTemplate response) {
         cityName = response.getResult().getData().getRealtime().getCity_name();
-        temperature_now = response.getResult().getData().getRealtime().getWeather().getTemperature();
+        temperatureNow = response.getResult().getData().getRealtime().getWeather().getTemperature();
         weather = response.getResult().getData().getRealtime().getWeather().getInfo();
+        week = response.getResult().getData().getRealtime().getWeek();
+        temperatureMin = response.getResult().getData().getWeather().get(0).getInfo().getNight().get(2);
+        temperatureMax = response.getResult().getData().getWeather().get(0).getInfo().getDay().get(2);
+        windSpeed = response.getResult().getData().getRealtime().getWind().getPower();
+        tv_temperature_min.setText(temperatureMin);
+        tv_temperature_max.setText(temperatureMax);
         tv_weather.setText(weather);
         tv_city_name.setText(cityName);
-        tv_temperature.setText(temperature_now + "°");
+        tv_temperature.setText(temperatureNow + "°");
+        tv_week.setText(getWeek(week));
+        tv_wind_speed.setText(windSpeed);
         initNearlyWeekWeather(response);
         initHorizontalScrollView(response);
         initWeatherDescription(response);
@@ -482,23 +561,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /**
-     * 点击事件
-     */
-    @OnClick({R.id.bt_login})
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_login:
-                Intent intent = new Intent();
-                intent.setClass(this, LoginActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
-        }
-        Toast.makeText(MainActivity.this, "点击", Toast.LENGTH_SHORT).show();
-
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {

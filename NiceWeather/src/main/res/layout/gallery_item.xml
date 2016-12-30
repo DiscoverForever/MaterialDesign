@@ -16,8 +16,7 @@
     <ImageView
         android:id="@+id/iv_weather"
         android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/cloudy"/>
+        android:layout_height="20dp" />
 
     <TextView
         android:id="@+id/tv_temperature"

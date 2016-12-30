@@ -13,6 +13,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.moon.niceweather.R;
 import com.moon.niceweather.template.ResponseTemplate;
 import com.moon.niceweather.template.WeatherItem;
+import com.moon.niceweather.utils.IdToResource;
 
 import java.util.ArrayList;
 
@@ -21,10 +22,12 @@ import java.util.ArrayList;
  */
 public class WeatherListAdapter extends BaseAdapter {
 
+    private Context context;
     private ArrayList<WeatherItem> data;
     private LayoutInflater mInflater = null;
 
     public WeatherListAdapter(Context context, ResponseTemplate data) {
+        this.context = context;
         this.data = data.getResult().getData().getWeather();
         this.mInflater = LayoutInflater.from(context);
     }
@@ -50,16 +53,16 @@ public class WeatherListAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.item_list_weather, null);
-            ViewUtils.inject(viewHolder,convertView);
+            ViewUtils.inject(viewHolder, convertView);
 
         } else {
 
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.tv_week.setText("星期"+data.get(position).getWeek());
+        viewHolder.tv_week.setText("星期" + data.get(position).getWeek());
         viewHolder.tv_temperature_min.setText(data.get(position).getInfo().getDay().get(2));
         viewHolder.tv_temperature_max.setText(data.get(position).getInfo().getNight().get(2));
-        viewHolder.iv_weather.setBackgroundResource(R.drawable.cloudy);
+        viewHolder.iv_weather.setBackgroundResource(IdToResource.getPicResource(context,data.get(position).getInfo().getDay().get(0)));
         convertView.setTag(viewHolder);
         return convertView;
     }
