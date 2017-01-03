@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -27,9 +28,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+//import com.moon.niceweather.BR;
 import com.moon.niceweather.R;
+import com.moon.niceweather.databinding.ActivityLoginBinding;
+import com.moon.niceweather.template.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,10 +71,14 @@ public class LoginActivity extends SwipeBackActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
+    private ActivityLoginBinding mBinding;
+    private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        initDataBinding();
         ViewUtils.inject(this);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -97,6 +106,23 @@ public class LoginActivity extends SwipeBackActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+    }
+
+    /**
+     * 初始化databinding
+     */
+    private void initDataBinding() {
+//        user = new User();
+//        user.setUsername("example@qq.com");
+//        user.setPassword("123456");
+        String data = "{'username':'example@xx.com','password':'123456'}";
+        Gson gson = new Gson();
+        user = gson.fromJson(data,User.class);
+        mBinding = DataBindingUtil.setContentView(this,R.layout.activity_login);
+
+        mBinding.setUser(user);
+//        mBinding.setVariable(BR.user,user);
     }
 
     private void populateAutoComplete() {
